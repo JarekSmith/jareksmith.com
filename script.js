@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const currentTime = new Date();
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    document.getElementsByClassName("timestamp")[0].innerText = `${months[currentTime.getMonth()]} ${currentTime.getDate()}, ${currentTime.getFullYear()}`;
+    document.getElementsByClassName("timestamp")[0].innerText = `${months[currentTime.getMonth()]} ${currentTime.getDate()}, ${currentTime.getFullYear()} | ${(getRatio()*100).toFixed(2)}%`;
 })
 
 const getRatio = () => {
