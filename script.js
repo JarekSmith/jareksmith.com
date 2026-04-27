@@ -1,4 +1,7 @@
+const audio = new Audio("music/Strong and Strike.mp3");
+
 document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("player").addEventListener("click", playMusic);
     const canvasElement = document.getElementById("canvas-element");
     const context = canvasElement.getContext("2d");
     
@@ -16,4 +19,9 @@ const getRatio = () => {
     const last = new Date(2027, 6, 2).valueOf();
     const current = new Date().valueOf();
     return (current - first) / (last - first);
+}
+
+const playMusic = () => {
+    if (audio.paused) audio.play();
+    else audio.pause();
 }
