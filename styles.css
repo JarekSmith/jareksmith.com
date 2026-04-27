@@ -1,0 +1,53 @@
+body {
+    background-color: beige;
+    background-image: url("images/bug.gif");
+    margin: 0px 500px;
+}
+
+.title {
+    font-size: 50pt;
+}
+
+.subtitle {
+    font-size: 30pt;
+}
+
+.timestamp {
+    font-size: 25pt;
+}
+
+#canvas-element {
+    top: 318.1px;
+    position: absolute;
+    border-top: blue 2px solid;
+    border-bottom: blue 2px solid;
+    background-color: white;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.flag-background {
+    background-image: url("images/flag.svg");
+    height: 727px;
+    width: 1000px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: black solid 2px;
+}
+
+.text-backer {
+    background-color: #1c233680;
+    backdrop-filter: blur(20px);
+    padding: 15px;
+    border-radius: 25px;
+    margin-top: 50px;
+    color: gold;
+}
