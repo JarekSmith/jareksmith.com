@@ -1,27 +1,45 @@
+@media (orientation:portrait) {
+    :root {
+        --width: 80vw;
+        --font: 1.4vw;
+    }
+}
+
+@media (orientation:landscape) {
+    :root {
+        --width: 50vw;
+        --font: 1vh;
+    }
+}
+
 body {
     background-color: beige;
     background-image: url("images/bug.gif");
-    margin: 0px 500px;
 }
 
 .title {
-    font-size: 50pt;
+    font-size: calc(var(--font) * 3);
 }
 
 .subtitle {
-    font-size: 30pt;
+    font-size: calc(var(--font) * 2);
 }
 
+#jada-image {
+    width: calc(var(--width) * 0.75);
+}
 .timestamp {
-    font-size: 25pt;
+    font-size: calc(var(--font) * 1.75);
 }
 
 #canvas-element {
-    top: 318.1px;
+    aspect-ratio: 22/2;
+    top: calc(var(--width) * 16 / 22 * 7 / 16);
     position: absolute;
     border-top: blue 2px solid;
     border-bottom: blue 2px solid;
     background-color: white;
+    width: var(--width);
 }
 
 .wrapper {
@@ -30,12 +48,15 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    width: 100vw;
 }
 
 .flag-background {
+    aspect-ratio: 22/16;
     background-image: url("images/flag.svg");
-    height: 727px;
-    width: 1000px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: var(--width);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -43,20 +64,27 @@ body {
     border: black solid 2px;
 }
 
+.text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .text-backer {
     background-color: #1c233680;
     backdrop-filter: blur(20px);
-    padding: 15px;
+    padding: 1vw;
     border-radius: 25px;
-    margin-top: 50px;
+    margin-top: 2vh;
     color: gold;
+    width: 70%;
 }
 
 #player {
     position: fixed;
     bottom: 0;
     right: 0;
-    width: 200px;
+    width: max(10vw, 10vh);
 }
 
 #player:hover {

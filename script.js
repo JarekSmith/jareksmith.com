@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const getRatio = () => {
     const first = new Date(2026, 0, 18).valueOf();
-    const last = new Date(2027, 6, 2).valueOf();
+    const last = new Date(2027, 6, 21).valueOf();
     const current = new Date().valueOf();
     return (current - first) / (last - first);
 }
