@@ -1,54 +1,43 @@
-@media (orientation:portrait) {
-    :root {
-        --width: 80vw;
-        --font: 1.4vw;
-    }
-}
-
-@media (orientation:landscape) {
-    :root {
-        --width: 50vw;
-        --font: 1vh;
-    }
+:root {
+  --height: 40vh;
+  --width: 40vw;
 }
 
 body {
     background-color: beige;
     background-image: url("images/bug.gif");
-}
-
-.title {
-    font-size: calc(var(--font) * 3);
-}
-
-.subtitle {
-    font-size: calc(var(--font) * 2);
+    display: grid;
+    place-items: center;
+    grid-template-columns: 25% 50% 25%;
 }
 
 #jada-image {
-    width: calc(var(--width) * 0.75);
+  height: 30vh;
 }
+
 .timestamp {
     font-size: calc(var(--font) * 1.75);
 }
 
 #canvas-element {
     aspect-ratio: 22/2;
-    top: calc(var(--width) * 16 / 22 * 7 / 16);
+    top: calc(var(--height) * 7 / 16);
     position: absolute;
     border-top: blue 2px solid;
     border-bottom: blue 2px solid;
     background-color: white;
-    width: var(--width);
+    height: calc(var(--height)/8);
 }
 
 .wrapper {
+    grid-column: 2 / 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
+    margin: 15vh;
 }
 
 .flag-background {
@@ -56,7 +45,7 @@ body {
     background-image: url("images/flag.svg");
     background-repeat: no-repeat;
     background-size: cover;
-    width: var(--width);
+    height: var(--height);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -71,13 +60,24 @@ body {
 }
 
 .text-backer {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     background-color: #1c233680;
     backdrop-filter: blur(20px);
-    padding: 1vw;
+    padding: 1vh;
     border-radius: 25px;
     margin-top: 2vh;
     color: gold;
-    width: 70%;
+    aspect-ratio: 6/1;
+    height: 8vh;
+    font-family: "Helvetica";
+}
+
+.text-backer > * {
+  margin: 0px;
+  font-size: 2vh;
 }
 
 #player {
@@ -89,4 +89,21 @@ body {
 
 #player:hover {
     cursor: pointer;
+}
+
+#header-stripe {
+  background-color: green;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  margin: 0px;
+  height: 10vh;
+  text-align: center;
+}
+
+#page-title {
+  font-size: 5vh;
+  font-style: italic;
+  color: red;
+  filter: drop-shadow(5px 5px 5px black);
 }
