@@ -1,0 +1,53 @@
+:root {
+    --primary-color: pink;
+    --secondary-color: green;
+    background-color: var(--primary-color);
+}
+
+html, body {
+    height: 100%;
+    font-size: 2vh;
+    font-family: "Comic Sans MS";
+}
+
+img {
+    position: absolute;
+    height: 30vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: -1;
+}
+
+body {
+    position: relative;
+    margin: 0 15vw;
+    z-index: 0;
+}
+
+h1 {
+    color: green;
+    text-decoration: underline;
+}
+
+a {
+    color: blue;
+    text-decoration: none;
+    background-color: lightgreen;
+    padding: 5px;
+    width: fit-content;
+    border-radius: 10px;
+    filter: drop-shadow(5px 5px 5px black);
+}
+
+a:hover {
+    filter: brightness(150%);
+}
+
+#link-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
