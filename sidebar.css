@@ -1,0 +1,136 @@
+:root {
+	--font-color: black;
+	--background-color: white;
+	--textarea-color: white;
+	--font-size: 1em;
+	font-size: var(--font-size);
+}
+
+body {
+	background-color: var(--background-color);
+	color: var(--font-color);
+	font-size: var(--font-size);
+	font-family: "Verdana";
+}
+
+.v-flex {
+	display: flex;
+	flex-direction: column;
+	justify-content:flex-start;
+}
+
+.v-flex * {
+	margin: 2.5px 0px;
+}
+
+.h-flex {
+	display: flex;
+	flex-direction: row;
+}
+
+.h-flex * {
+	margin: 0px 2.5px;
+}
+
+
+.page {
+	display: flex;
+	flex-direction: column;
+}
+
+#options-page button {
+	width: 45vw;
+}
+
+.hidden {
+	display: none;
+}
+
+footer {
+	position: absolute;
+	bottom:0;
+}
+
+#ids {
+	position: relative;
+}
+
+#id-list {
+	position: absolute;
+	left:0;
+	top:100%;
+}
+
+#id-list div {
+	background: lightgray;
+	padding: 5px;
+	border: solid 1px black;
+	display: none;
+}
+
+#id-list div:hover {
+	filter: brightness(150%);
+	cursor: pointer;
+}
+
+#ids:hover div {
+	display: block;
+}
+
+textarea {
+	height: 40vh;
+	background-color: var(--textarea-color);
+	color: var(--font-color);
+	font-size: 1.7em;
+	font-family: "Verdana Mono";
+}
+
+#links-grid {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	max-height: 40vh;
+	overflow: auto;
+	gap: 3vw;
+	align-items: flex-start;
+}
+
+#links-grid * {
+	flex-grow: 0;
+}
+
+#links-grid a {
+	display: flex;
+	flex-direction: column;
+	width: 28vw;
+	text-decoration: none;
+	color: var(--font-color);
+	place-items: center;
+	flex-grow:0;
+}
+
+#links-grid a:hover {
+	cursor: pointer;
+	filter: brightness(150%);
+}
+
+#links-grid a img {
+	width: 100%;
+	border-radius: 15px;
+}
+
+th {
+	text-align:start;
+	border-bottom: 2px solid black;
+}
+
+#holds-page #amount {
+	width: 30vw;
+}
+
+#holds-page button {
+	width: calc(30vw + 70px);
+}
+
+button {
+	font-size: 0.8em;
+}

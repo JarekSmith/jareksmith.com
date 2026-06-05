@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="sidebar.js"></script>
+		<link rel="stylesheet" href="sidebar.css" />
+		<link rel="shortcut icon" href="favicon.ico" />
+		<title>Sidebar</title>
+	</head>
+	<body class="v-flex">
+		<div id="notes-page" class="page">
+			<div class="h-flex">
+				<button id="erase">Erase</button>
+				<button id="ids">IDs<div id="id-list"></div></button>
+				<button id="add">Add</button>
+			</div>
+			<textarea></textarea>
+			<div id="links-grid">
+			</div>
+			<table id="employees-table">
+				<thead>
+					<tr><th>Name</th><th>Number</th></tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<div id="calc-page" class="page hidden">
+			<h2>Calculator</h2>
+			<textarea id="calculator-textarea"></textarea>
+			<button id="calculate-total">Calculate</button>
+			<span></span>
+		</div>
+		<div id="holds-page" class="page hidden">
+			<h2>Holds Calculator</h2>
+			<div class="h-flex">
+				<span>Total $</span>
+				<input id="amount" value="0.00">
+				<span>Extended?</span>
+				<input id="extended" type="checkbox" value="false">
+			</div>
+			<button id="calculate-hold">Calculate Hold</button>
+			<h3>Holds</h3>
+			<table id="holds-list">
+				<thead><tr><th>Type</th><th>Amount</th><th>Expires</th></tr></thead>
+				<tbody></tbody>
+			</table>
+			
+		</div>
+		<div id="options-page" class="page hidden">
+			<h2>Options</h2>
+			<div class="h-flex">
+				<button id="load-ids">Load IDs</button>
+				<button id="export-ids">Export IDs</button>
+			</div>
+			<div class="h-flex">
+				<button id="load-links">Load Links</button>
+				<button id="export-links">Export Links</button>
+			</div>
+			<div class="h-flex">
+				<button id="load-employees">Load Employees</button>
+				<button id="export-employees">Export Employees</button>
+			</div>
+			<button id="theme-switcher">Dark Mode</button>
+			<div class="h-flex">
+				<input type="number" min="1" max="2" step="0.01" value="1.00">
+				<input id="font-size-slider" type="range" min="1" max="2" step="0.01" value="1.0">
+				<button id="apply-font-changes">Apply</button>
+			</div>
+			<span id="sample-text">Sample Text</span>
+		</div>
+		<footer>
+			<button>Notes</button>
+			<button>Calculator</button>
+			<button>Holds</button>
+			<button>Options</button>
+		</footer>
+	</body>
+</html>
