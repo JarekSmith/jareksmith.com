@@ -291,7 +291,8 @@ function populateLinks() {
 		image.addEventListener("error", e => {
 			e.target.src = SVGMaker(link.name);
 		});
-		image.src = `sidebarImages/${link.name}`;
+		if (link.image) image.src = link.image;
+		else image.src = `sidebarImages/${link.name}`;
 		image.alt = `Link to ${link.name}`;
 		const span = document.createElement("span");
 		span.innerText = link.name;
