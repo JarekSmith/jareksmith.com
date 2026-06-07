@@ -19,7 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttons["export-ids"].addEventListener("click", idsManager.export);
 	buttons["theme-switcher"].addEventListener("click", toggleDarkMode);
 	buttons["apply-font-changes"].addEventListener("click", applyFontChanges);
-	
+	// Add Link Popup
+	buttons["cancel-link"].addEventListener("click", () => {
+		document.getElementById("add-link-popup").classList.add("hidden");
+		[...document.getElementById("add-link-popup").getElementsByTagName("input")].forEach(el=>el.value="");
+	});
+	buttons["create-link"].addEventListener("click", addLink);
 
 	document.getElementById("font-size-slider").addEventListener("input", fontPreview);
 	document.getElementById("font-size-slider").previousElementSibling.addEventListener("input", fontPreview);
@@ -244,11 +249,13 @@ const linksManager = (() => {
 	};
 	return {
 		add(name, link) {
-			links = links.filter(l.link !== link);
+			links = links.filter(l => l.link !== link);
 			links.push({name, link});
+			save()
 		},
 		remove(link) {
-			links = links.filter(l.link !== link);
+			links = links.filter(l => l.link !== link);
+			save();
 		},
 		toArray() {
 			return links;
@@ -280,29 +287,61 @@ const linksManager = (() => {
 		},
 		export() {
 			downloadJSON("links", links);
+		},
+		createLink(name, link, image) {
+			const img = Object.assign(document.createElement("img"), {src: image ?? SVGMaker(name)});
+			const span = Object.assign(document.createElement("span"), {innerText: name});
+			const linkEl = Object.assign(document.createElement("a"), {href: link, target: "_blank"});
+			linkEl.append(img, span);
+			linkEl.addEventListener("contextmenu", e => {
+				e.preventDefault();
+				linksManager.remove(link);
+				imageHandler.remove(name);
+				populateLinks();
+			})
+			return linkEl;
 		}
 	}
 })();
 
 function populateLinks() {
 	const linksGrid = document.getElementById("links-grid");
-	for (const link of linksManager) {
-		const image = document.createElement("img");
-		image.addEventListener("error", e => {
-			e.target.src = SVGMaker(link.name);
-		});
-		if (link.image) image.src = link.image;
-		else image.src = `sidebarImages/${link.name}`;
-		image.alt = `Link to ${link.name}`;
-		const span = document.createElement("span");
-		span.innerText = link.name;
-		const anchor = document.createElement("a");
-		anchor.href = link.link;
-		anchor.target = "_blank";
-		anchor.append(image, span);		
-		linksGrid.append(anchor);
+	linksGrid.innerHTML = "";
+	for (const link of linksManager) {	
+		linksGrid.append(linksManager.createLink(link.name, link.link, imageHandler.get(link.name)));
 	}
+	const addLinkButton = document.createElement("a");
+	const svg = `
+	<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+		<defs>
+			<mask id="Mask">
+				<rect width="100" height="100" fill="white" />
+				<line x1="50" y1="10" x2="50" y2="90" style="stroke:black;stroke-width:10px" />
+				<line x1="10" y1="50" x2="90" y2="50" style="stroke:black;stroke-width:10px" />
+			</mask>
+		</defs>
+		<rect width="100" height="100" fill="blue" mask="url(#Mask)"/>
+	</svg>
+	`;
+	const img = Object.assign(document.createElement("img"), {src: `data:image/svg+xml,${encodeURIComponent(svg)}`});
+
+	addLinkButton.append(img, Object.assign(document.createElement("span"),{innerText:"New..."}));
+	addLinkButton.addEventListener("click", async () => {
+		document.getElementById("add-link-popup").classList.remove("hidden");
+	})
+	linksGrid.append(addLinkButton);
 }
+
+function addLink() {
+	const linkPopup = document.getElementById("add-link-popup");
+	const [nameEl, linkEl, fileEl] = linkPopup.getElementsByTagName("input");
+	if (nameEl.value && linkEl.value && fileEl.files[0]) {
+		linksManager.add(nameEl.value, linkEl.value);
+		imageHandler.addFromImage(fileEl.files[0], nameEl.value);
+		linkPopup.classList.add("hidden");
+		populateLinks();
+	}
+} 
 
 function SVGMaker(name) {
 	const initials = name.split(" ").map(w => w[0].toUpperCase()).join("");
@@ -391,3 +430,69 @@ function fontPreview(e) {
 function applyFontChanges() {
 	document.documentElement.style.setProperty("--font-size", document.getElementById("font-size-slider").value + "em");
 }
+
+const imageHandler = (() => {
+	let images = JSON.parse(localStorage.getItem('images') ?? "[]");
+	function save(){
+		localStorage.setItem('images', JSON.stringify(images));
+	}
+	/**
+	 * Prompts the user to upload an image and returns the File
+	 * @returns {Promise<File>}
+	 */
+	async function getImage() {
+		return new Promise((resolve, reject) => {
+			const fileInput = Object.assign(document.createElement("input"), {type: "file", accept: "image/*"});
+			fileInput.addEventListener("change", e => {
+				const file = e.target.files[0];
+				if (file) resolve(file);
+				else reject("Image not uploaded");
+			});
+			fileInput.click();
+		});			
+	}
+	/**
+	 * Converts a png to a URI that can be stored in localStorage
+	 * @param {File} image 
+	 * @returns {Promise<string>}
+	 */
+	async function imageToURI(image) {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = () => resolve(reader.result);
+			reader.onerror = () => reject("Couldn't load file as URL");
+			reader.readAsDataURL(image);
+		})
+	}
+	return {
+		async add(name) {
+			const image = await getImage().then(img => imageToURI(img), reason => {
+				console.error(reason);
+				return null;
+			});
+			if (!image) return;
+			images.push({name, image});
+			save();
+			populateLinks();
+		},
+		async addFromImage(img, name) {
+			console.log(img);
+			const image = await imageToURI(img);
+			if (!image) {console.log("FAILED"); return;}
+			images.push({name, image});
+			save();
+			populateLinks();
+		},
+		remove(name) {
+			images = images.filter(image => image.name !== name);
+			save();
+			populateLinks();
+		},
+		get(name) {
+			for (const image of images) {
+				if (image.name === name) return image.image;
+			}
+			return null;
+		}
+	}
+})();

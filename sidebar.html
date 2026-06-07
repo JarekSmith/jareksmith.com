@@ -15,8 +15,6 @@
 				<button id="add">Add</button>
 			</div>
 			<textarea></textarea>
-			<div id="links-grid">
-			</div>
 			<table id="employees-table">
 				<thead>
 					<tr><th>Name</th><th>Number</th></tr>
@@ -24,6 +22,8 @@
 				<tbody>
 				</tbody>
 			</table>
+			<div id="links-grid">
+			</div>
 		</div>
 		<div id="calc-page" class="page hidden">
 			<h2>Calculator</h2>
@@ -34,8 +34,10 @@
 		<div id="holds-page" class="page hidden">
 			<h2>Holds Calculator</h2>
 			<div class="h-flex">
-				<span>Total $</span>
+				<span>Amount</span>
 				<input id="amount" value="0.00">
+			</div>
+			<div class="h-flex">
 				<span>Extended?</span>
 				<input id="extended" type="checkbox" value="false">
 			</div>
@@ -61,13 +63,24 @@
 				<button id="load-employees">Load Employees</button>
 				<button id="export-employees">Export Employees</button>
 			</div>
-			<button id="theme-switcher">Dark Mode</button>
+			<div class="h-flex">
+				<button id="theme-switcher">Dark Mode</button>
+			</div>
 			<div class="h-flex">
 				<input type="number" min="1" max="2" step="0.01" value="1.00">
 				<input id="font-size-slider" type="range" min="1" max="2" step="0.01" value="1.0">
 				<button id="apply-font-changes">Apply</button>
 			</div>
 			<span id="sample-text">Sample Text</span>
+		</div>
+		<div id="add-link-popup" class="popout hidden">
+			<h2>Create Link</h2>
+			<div class="grid">
+				<span>Name</span><input id="add-link-name">
+				<span>Link</span><input id="add-link-link">
+				<span>Image</span><input id="add-link-image" type="file">
+				<button id="create-link">Create</button><button id="cancel-link">Cancel</button>
+			</div>
 		</div>
 		<footer>
 			<button>Notes</button>
