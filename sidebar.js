@@ -1,38 +1,49 @@
 document.addEventListener("DOMContentLoaded", () => {
-	const buttons = document.getElementsByTagName("button");
-	[...document.getElementsByTagName("footer")[0].getElementsByTagName("button")].forEach(p => {
-		p.addEventListener("click", switchPage);
+	const elementEventCallback = [
+		["erase", "click", erase],
+		["add", "click", idsManager.add],
+		["calculate-total", "click", calculateTotal],
+		["amount", "focusout", holdsAmountChange],
+		["calculate-hold", "click", calculateHolds],
+		["load-employees", "click", employeeManager.load],
+		["export-employees", "click", employeeManager.export],
+		["load-links", "click", linksManager.load],
+		["export-links", "click", linksManager.export],
+		["load-ids", "click", idsManager.load],
+		["export-ids", "click", idsManager.export],
+		["theme-switcher", "click", toggleDarkMode],
+		["apply-font-changes", "click", applyFontChanges],
+		["cancel-link", "click", () => {
+			document.getElementById("add-link-popup").classList.add("hidden");
+			[...document.getElementById("add-link-popup")
+						.getElementsByTagName("input")
+					   ].forEach(el=>el.value="");
+		}],
+		["create-link", "click", addLink]
+	];
+	elementEventCallback.forEach(([id, event, callback]) => {
+		document.getElementById(id).addEventListener(event, callback);
 	});
-	buttons["erase"].addEventListener("click", erase);
-	buttons["add"].addEventListener("click", idsManager.add);
-	// Calculator
-	buttons["calculate-total"].addEventListener("click", calculateTotal);
-	// Holds Calculator
-	document.getElementById("amount").addEventListener("focusout", holdsAmountChange);
-	buttons["calculate-hold"].addEventListener("click", calculateHolds);
-	// Options
-	buttons["load-employees"].addEventListener("click", employeeManager.load);
-	buttons["export-employees"].addEventListener("click", employeeManager.export);
-	buttons["load-links"].addEventListener("click", linksManager.load);
-	buttons["export-links"].addEventListener("click", linksManager.export);
-	buttons["load-ids"].addEventListener("click", idsManager.load);
-	buttons["export-ids"].addEventListener("click", idsManager.export);
-	buttons["theme-switcher"].addEventListener("click", toggleDarkMode);
-	buttons["apply-font-changes"].addEventListener("click", applyFontChanges);
-	// Add Link Popup
-	buttons["cancel-link"].addEventListener("click", () => {
-		document.getElementById("add-link-popup").classList.add("hidden");
-		[...document.getElementById("add-link-popup").getElementsByTagName("input")].forEach(el=>el.value="");
-	});
-	buttons["create-link"].addEventListener("click", addLink);
-
-	document.getElementById("font-size-slider").addEventListener("input", fontPreview);
-	document.getElementById("font-size-slider").previousElementSibling.addEventListener("input", fontPreview);
-
+	[...document.getElementsByTagName("footer")[0]
+		.getElementsByTagName("button")
+	   ].forEach(b => b.addEventListener("click", switchPage));
+	getPages("options-page").getElementsByTagName("input")[0]
+							.addEventListener("input", fontPreview);
 	populateEmployees();
 	populateLinks();
 	populateIDs();
 });
+
+function addButtonEventListener(id, event, callback) {
+	const buttons = document.getElementsByTagName("button");
+	buttons[id].addEventListener(event, callback);
+}
+
+function getPages(id) {
+	const pages = document.getElementsByClassName("page");
+	if (id) return pages[id];
+	return [...pages];
+}
 
 const format = new Intl.NumberFormat("en-US", {
 	style: 'currency',
@@ -416,19 +427,15 @@ function switchPage(e) {
 	});
 }
 
-function fontPreview(e) {
-	const slider = document.getElementById("font-size-slider");
-	const counter = slider.previousElementSibling;
-	let newValue = slider.value;
-	if (e.target === counter) newValue = counter.value;
+function fontPreview() {
+	const optionsPage = document.getElementById("options-page");
+	const counter = optionsPage.getElementsByTagName("input")[0];
 	const preview = document.getElementById("sample-text");
-	if (e.target === slider) counter.value = Number(slider.value).toFixed(2);
-	else slider.value = Number(counter.value).toFixed(2);
-	preview.style.fontSize = `${slider.value}em`;
+	preview.style.fontSize = `${counter.value}em`;
 }
 
 function applyFontChanges() {
-	document.documentElement.style.setProperty("--font-size", document.getElementById("font-size-slider").value + "em");
+	document.documentElement.style.setProperty("--font-size", getPages("options-page").getElementsByTagName("input")[0].value + "em");
 }
 
 const imageHandler = (() => {
