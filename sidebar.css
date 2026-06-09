@@ -120,10 +120,11 @@ textarea:hover {
 #links-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 30%);
-	max-height: 40vh;
-	overflow: auto;
+	aspect-ratio: 1.4 / 1;
+	overflow: scroll;
 	gap: 3%;
 	align-items: flex-start;
+	scrollbar-width:none;
 }
 
 #links-grid * {
@@ -206,11 +207,23 @@ input {
 	grid-template-columns: auto auto;
 }
 
-#add-link-popup {
+.popout {
 	background-color: var(--background-color);
 	width: 250px;
 	height: min-content;
 	padding: 10px;
 	position: absolute;
 	top:50%;
+}
+
+.popout input {
+	width: 90%;
+}
+
+#add-buttons-container {
+	text-wrap: nowrap;
+}
+
+#employees-table tbody {
+	text-shadow: 2px 2px black;
 }

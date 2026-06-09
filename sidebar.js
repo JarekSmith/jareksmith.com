@@ -13,6 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		["export-ids", "click", idsManager.export],
 		["theme-switcher", "click", toggleDarkMode],
 		["apply-font-changes", "click", applyFontChanges],
+		["add-link", "click", () => {
+			document.getElementById("add-link-popup").classList.toggle("hidden");
+		}],
+		["add-employee", "click", () => {
+			document.getElementById("add-employee-popup").classList.toggle("hidden");
+		}],
 		["cancel-link", "click", () => {
 			document.getElementById("add-link-popup").classList.add("hidden");
 			[...document.getElementById("add-link-popup")
@@ -23,6 +29,37 @@ document.addEventListener("DOMContentLoaded", () => {
 	];
 	elementEventCallback.forEach(([id, event, callback]) => {
 		document.getElementById(id).addEventListener(event, callback);
+	});
+	[...document.getElementById("add-employee-popup").getElementsByTagName("button")].forEach(b => {
+		switch (b.innerText) {
+			case "Create":
+				b.addEventListener("click", () => {
+					const [name, number, color] = [...document.getElementById("add-employee-popup").getElementsByTagName("input")];
+					for (const input of [name, number, color]) {
+						if (input.value === "") return;
+					}
+					employeeManager.add(name.value, number.value, color.value);
+					document.getElementById("add-employee-popup").classList.add("hidden");
+				});
+				break;
+			case "Cancel":
+				b.addEventListener("click", () => {
+					document.getElementById("add-employee-popup").classList.add("hidden");
+					[...document.getElementById("add-employee-popup")
+								.getElementsByTagName("input")
+							   ].forEach(el=>el.value="");
+				});
+				break;
+			default:
+				console.log(b.innerText);
+		}
+	});
+	document.getElementById("employees-table").getElementsByTagName("tbody")[0].addEventListener("contextmenu", e => {
+		e.preventDefault();
+		const row = e.target.closest("tr");
+		const number = row.getElementsByTagName("td")[1].innerText;
+		employeeManager.remove(number);
+		populateEmployees();
 	});
 	[...document.getElementsByTagName("footer")[0]
 		.getElementsByTagName("button")
@@ -190,11 +227,12 @@ const employeeManager = (() => {
 		/**
 		 * Adds an employee or updates an employee with an identical number
 		 */
-		add(name, number) {
+		add(name, number, color) {
 			number = number.toLowerCase();
 			employees = employees.filter(e => e.number!==number);
-			employees.push({name, number});
+			employees.push({name, number, color});
 			save();
+			populateEmployees();
 		},
 		/**
 		 * Removes an employee using their number (full string, including starting character)
@@ -300,10 +338,10 @@ const linksManager = (() => {
 			downloadJSON("links", links);
 		},
 		createLink(name, link, image) {
-			const img = Object.assign(document.createElement("img"), {src: image ?? SVGMaker(name)});
+			const img = Object.assign(document.createElement("img"), {src: image ?? SVGMaker(name), alt: name});
 			const span = Object.assign(document.createElement("span"), {innerText: name});
-			const linkEl = Object.assign(document.createElement("a"), {href: link, target: "_blank"});
-			linkEl.append(img, span);
+			const linkEl = Object.assign(document.createElement("a"), {href: link, target: "_blank", title: name});
+			linkEl.append(img, /*span*/);
 			linkEl.addEventListener("contextmenu", e => {
 				e.preventDefault();
 				linksManager.remove(link);
@@ -321,26 +359,6 @@ function populateLinks() {
 	for (const link of linksManager) {	
 		linksGrid.append(linksManager.createLink(link.name, link.link, imageHandler.get(link.name)));
 	}
-	const addLinkButton = document.createElement("a");
-	const svg = `
-	<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
-		<defs>
-			<mask id="Mask">
-				<rect width="100" height="100" fill="white" />
-				<line x1="50" y1="10" x2="50" y2="90" style="stroke:black;stroke-width:10px" />
-				<line x1="10" y1="50" x2="90" y2="50" style="stroke:black;stroke-width:10px" />
-			</mask>
-		</defs>
-		<rect width="100" height="100" fill="blue" mask="url(#Mask)"/>
-	</svg>
-	`;
-	const img = Object.assign(document.createElement("img"), {src: `data:image/svg+xml,${encodeURIComponent(svg)}`});
-
-	addLinkButton.append(img, Object.assign(document.createElement("span"),{innerText:"New..."}));
-	addLinkButton.addEventListener("click", async () => {
-		document.getElementById("add-link-popup").classList.remove("hidden");
-	})
-	linksGrid.append(addLinkButton);
 }
 
 function addLink() {

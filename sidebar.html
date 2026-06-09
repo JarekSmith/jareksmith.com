@@ -24,6 +24,10 @@
 			</table>
 			<div id="links-grid">
 			</div>
+			<div class="h-flex" id="add-buttons-container">
+				<button id="add-link">New Link</button>
+				<button id="add-employee">New Employee</button>
+			</div>
 		</div>
 		<div id="calc-page" class="page hidden">
 			<h2>Calculator</h2>
@@ -79,6 +83,15 @@
 				<span>Link</span><input id="add-link-link">
 				<span>Image</span><input id="add-link-image" type="file">
 				<button id="create-link">Create</button><button id="cancel-link">Cancel</button>
+			</div>
+		</div>
+		<div id="add-employee-popup" class="popout hidden">
+			<h2>Create Employee</h2>
+			<div class="grid">
+				<span>Name</span><input>
+				<span>Number</span><input>
+				<span>Color</span><input type="color">
+				<button>Create</button><button>Cancel</button>
 			</div>
 		</div>
 		<footer>
